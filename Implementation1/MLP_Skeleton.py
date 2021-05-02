@@ -34,9 +34,9 @@ class LinearTransform(object):
 
     def backward(self, grad_output, learning_rate=0.0, momentum=0.0, l2_penalty=0.0):
         # DEFINE backward function
-        # dE/dx = dE/dz1 * dz1/dx = grad_output * W
         # dE/dw = dE/dz1 * dz1/dw = grad_output * x
         # dE/db = dE/dz1 * dz1/db = grad_output * [1...1]T = sum of the rows
+        # dE/dx = dE/dz1 * dz1/dx = grad_output * W
 
         dw = np.dot(self.x.T, grad_output)
         db = np.sum(grad_output, axis=0, keepdims=True)
@@ -192,7 +192,6 @@ def random_permute(x, y):
     return x, y
 
 
-
 if __name__ == '__main__':
     if sys.version_info[0] < 3:
         data = pickle.load(open('cifar_2class_py2.p', 'rb'))
@@ -225,20 +224,22 @@ if __name__ == '__main__':
     # YOU CAN CHANGE num_epochs AND num_batches TO YOUR DESIRED VALUES
     #np.random.seed(10)
     num_epochs = 100
-    batch_size = 512
+    batch_size = 256
     num_batches = num_examples // batch_size
     #print(num_batches)
     num_test_examples = np.shape(test_x)[0]
     num_val_batches = num_test_examples // batch_size
     hidden_units = 256
 
-    learning_rate = 0.0001
+    learning_rate = 0.001
     momentum = 0.8
     l2_penalty = 0
 
     mlp = MLP(input_dims, hidden_units)
     total_train_loss, total_train_acc = [], []
     total_val_loss, total_val_acc = [], []
+
+    print(f"Batch size: {batch_size}, Hidden units: {hidden_units}, Learning rate: {learning_rate}, Momentum: {momentum}")
 
     for epoch in range(num_epochs):
         # INSERT YOUR CODE FOR EACH EPOCH HERE
@@ -314,8 +315,3 @@ if __name__ == '__main__':
     plt.title('Accuracies')
     plt.savefig('Train_test_accuracies')
     plt.show()
-
-
-
-
-
